@@ -19,22 +19,27 @@ int main(int argc, char *argv[]) {
       instruction.erase(0, 1);
       int sum = std::stoi(instruction);
       lock += sum;
-      while (lock >= 100) {
+      while (lock > 99) {
         lock -= 100;
         cont++;
       }
     } else if (instruction[0] == 'L') {
       instruction.erase(0, 1);
       int subs = std::stoi(instruction);
+      if (lock == 0) {
+        cont--;
+      }
       lock -= subs;
       while (lock < 0) {
         lock += 100;
         cont++;
       }
+      if (lock == 0) {
+        cont++;
+      }
     } else {
       std::cout << "Wrong input format\n";
       return -1;
-      cont++;
     }
   }
 
