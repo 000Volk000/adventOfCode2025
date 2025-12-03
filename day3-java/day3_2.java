@@ -40,10 +40,10 @@ public class day3_2 {
     }
   }
 
-  public static Pair getBiggerCharPos(String line) {
-    Pair solution = new Pair(0, line.charAt(0));
+  public static Pair getBiggerCharPos(String line, Integer start, Integer end) {
+    Pair solution = new Pair(start, line.charAt(start));
 
-    for (int i = 1; i < line.length(); i++) {
+    for (int i = start; i <= end; i++) {
       if (line.charAt(i) > solution.getValue()) {
         solution.setKey(i);
         solution.setValue(line.charAt(i));
@@ -54,7 +54,7 @@ public class day3_2 {
   };
 
   public static void main(String[] args) {
-    File fich = new File("day3-example.txt");
+    File fich = new File("day3.txt");
 
     try (Scanner reader = new Scanner(fich)) {
       Long sumTot = Long.parseLong("0");
@@ -62,6 +62,16 @@ public class day3_2 {
       while (reader.hasNextLine()) {
         String line = reader.nextLine();
         ArrayList<Pair> numbers = new ArrayList<>();
+        Integer numSize = 12;
+        Integer start = 0;
+        Integer end = line.length() - numSize;
+
+        for (int i = 0; i < numSize; i++) {
+          Pair s = getBiggerCharPos(line, start, end);
+          numbers.add(s);
+          start = s.getKey() + 1;
+          end++;
+        }
 
         String numberStr = "";
         for (Pair pair : numbers) {
