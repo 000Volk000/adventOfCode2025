@@ -53,19 +53,6 @@ public class day3_2 {
     return solution;
   };
 
-  public static Pair getBiggerCharPosInverted(String line) {
-    Pair solution = new Pair(0, line.charAt(0));
-
-    for (int i = line.length() - 1; i > 0; i--) {
-      if (line.charAt(i) > solution.getValue()) {
-        solution.setKey(i);
-        solution.setValue(line.charAt(i));
-      }
-    }
-
-    return solution;
-  };
-
   public static void main(String[] args) {
     File fich = new File("day3-example.txt");
 
