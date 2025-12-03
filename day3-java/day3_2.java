@@ -75,30 +75,6 @@ public class day3_2 {
       while (reader.hasNextLine()) {
         String line = reader.nextLine();
         ArrayList<Pair> numbers = new ArrayList<>();
-        Integer erased = 0;
-
-        for (int i = 0; i < 12; i++) {
-          Pair s = new Pair(getBiggerCharPos(line));
-          System.out.println(
-              "skey: " + s.getKey() + "lleng: " + line.length() + "nsiz: " + numbers.size() + "eras: " + erased);
-          if ((s.getKey() < line.length() - (11 - numbers.size())) && (erased < (line.length() - 12))) {
-            String newLine = "";
-            for (int j = 0; j < s.getKey() + 1; j++) {
-              newLine = newLine + (char) ('0' - 1);
-            }
-            line = newLine + line.substring(s.getKey() + 1, line.length());
-          } else {
-            s = new Pair(getBiggerCharPosInverted(line));
-            line = line.substring(0, s.getKey()) + (char) ('0' - 1) + line.substring(s.getKey() + 1, line.length());
-          }
-          numbers.add(s);
-          erased++;
-          System.out.println(line);
-        }
-
-        numbers.sort((a, b) -> {
-          return Integer.compare(a.getKey(), b.getKey());
-        });
 
         String numberStr = "";
         for (Pair pair : numbers) {
