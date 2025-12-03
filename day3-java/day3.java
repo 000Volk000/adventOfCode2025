@@ -54,7 +54,7 @@ public class day3 {
   };
 
   public static void main(String[] args) {
-    File fich = new File("day3-example.txt");
+    File fich = new File("day3.txt");
 
     try (Scanner reader = new Scanner(fich)) {
       Integer sumTot = 0;
@@ -66,7 +66,15 @@ public class day3 {
         for (int i = 0; i < 2; i++) {
           Pair s = new Pair(getBiggerCharPos(line));
           numbers.add(s);
-          line = line.substring(0, s.getKey()) + (char) ('0' - 1) + line.substring(s.getKey() + 1, line.length());
+          if (s.getKey() != line.length() - 1) {
+            String newLine = "";
+            for (int j = 0; j < s.getKey() + 1; j++) {
+              newLine = newLine + (char) ('0' - 1);
+            }
+            line = newLine + line.substring(s.getKey() + 1, line.length());
+          } else {
+            line = line.substring(0, s.getKey()) + (char) ('0' - 1) + line.substring(s.getKey() + 1, line.length());
+          }
         }
 
         numbers.sort((a, b) -> {
@@ -77,7 +85,6 @@ public class day3 {
         for (Pair pair : numbers) {
           numberStr = numberStr + pair.getValue();
         }
-        System.out.println(numberStr);
         sumTot += Integer.parseInt(numberStr);
       }
 
