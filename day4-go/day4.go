@@ -44,7 +44,7 @@ func getMatrix(fichName string) [][]int {
 
 func main() {
 	paperN := 0
-	matrix := getMatrix("day4-example.txt")
+	matrix := getMatrix("day4.txt")
 
 	for _, line := range matrix {
 		for _, num := range line {
@@ -63,9 +63,43 @@ func main() {
 					if matrix[row+1][col] == 1 {
 						cont++
 					}
+					switch col {
+					case 0:
+						if matrix[row+1][col+1] == 1 {
+							cont++
+						}
+					case len(rowElem) - 1:
+						if matrix[row+1][col-1] == 1 {
+							cont++
+						}
+					default:
+						if matrix[row+1][col+1] == 1 {
+							cont++
+						}
+						if matrix[row+1][col-1] == 1 {
+							cont++
+						}
+					}
 				case len(matrix) - 1:
 					if matrix[row-1][col] == 1 {
 						cont++
+					}
+					switch col {
+					case 0:
+						if matrix[row-1][col+1] == 1 {
+							cont++
+						}
+					case len(rowElem) - 1:
+						if matrix[row-1][col-1] == 1 {
+							cont++
+						}
+					default:
+						if matrix[row-1][col+1] == 1 {
+							cont++
+						}
+						if matrix[row-1][col-1] == 1 {
+							cont++
+						}
 					}
 				default:
 					if matrix[row+1][col] == 1 {
@@ -73,6 +107,35 @@ func main() {
 					}
 					if matrix[row-1][col] == 1 {
 						cont++
+					}
+					switch col {
+					case 0:
+						if matrix[row+1][col+1] == 1 {
+							cont++
+						}
+						if matrix[row-1][col+1] == 1 {
+							cont++
+						}
+					case len(rowElem) - 1:
+						if matrix[row+1][col-1] == 1 {
+							cont++
+						}
+						if matrix[row-1][col-1] == 1 {
+							cont++
+						}
+					default:
+						if matrix[row+1][col+1] == 1 {
+							cont++
+						}
+						if matrix[row+1][col-1] == 1 {
+							cont++
+						}
+						if matrix[row-1][col+1] == 1 {
+							cont++
+						}
+						if matrix[row-1][col-1] == 1 {
+							cont++
+						}
 					}
 				}
 
@@ -96,7 +159,6 @@ func main() {
 
 				if cont < 4 {
 					paperN++
-					fmt.Println("Row, Col:", row, col)
 				}
 			}
 		}
