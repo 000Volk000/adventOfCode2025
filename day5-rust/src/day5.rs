@@ -9,17 +9,21 @@ fn check_ranges_overlap(ranges: &mut [(i32, i32)]) {
 pub fn ex1() {
     let full_fich =
         fs::read_to_string("day5-example.txt").expect("Could not open the file to read");
-    let fich: Vec<&str> = full_fich.split("\n\n").collect();
-    let ranges_lines = fich[0].lines();
-    let ids = fich[1].lines();
+    let (ranges_fich, ids_fich) = full_fich
+        .split_once("\n\n")
+        .expect("Couldnt split full fich onto ranges and ids");
+    let ranges_lines = ranges_fich.lines();
+    let ids = ids_fich.lines();
 
-    let mut ranges = Vec::<(i32, i32)>::new();
+    let mut ranges = Vec::<(i32, i32)>::with_capacity(ranges_lines.clone().count());
 
     for line in ranges_lines {
-        let min_max: Vec<&str> = line.split("-").collect();
+        let (start, end) = line
+            .split_once("-")
+            .expect("Couldnt split the range onto start and end");
         ranges.push((
-            min_max[0].parse().expect("A range is not a Number"),
-            min_max[1].parse().expect("A range is not a Number"),
+            start.parse().expect("A range is not a Number"),
+            end.parse().expect("A range is not a Number"),
         ));
     }
 
