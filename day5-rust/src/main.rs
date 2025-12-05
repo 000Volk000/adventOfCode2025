@@ -1,4 +1,5 @@
 mod day5;
+mod day5_2;
 use std::io::{Write, stdin, stdout};
 
 fn main() -> Result<(), String> {
@@ -11,6 +12,9 @@ fn main() -> Result<(), String> {
     match opt.trim() {
         "1" => {
             day5::ex1();
+        }
+        "2" => {
+            day5_2::ex2();
         }
         _ => {
             return Err("Please pick 1 or 2".to_string());
