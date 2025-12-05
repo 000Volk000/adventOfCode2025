@@ -54,12 +54,12 @@ pub fn ex1() {
     }
 
     check_ranges_overlap(&mut ranges);
+    ranges.retain(|&x| x != (-1, -1));
 
     let mut cont = 0;
     for id in ids {
         for r in &ranges {
-            if *r != (-1, -1) && is_between_equals(id.parse().expect("And id is not a Number"), *r)
-            {
+            if is_between_equals(id.parse().expect("And id is not a Number"), *r) {
                 cont += 1;
                 break;
             }
