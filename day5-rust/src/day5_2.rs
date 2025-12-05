@@ -1,36 +1,22 @@
 use std::fs;
 
-fn is_between(n: i64, range: (i64, i64)) -> bool {
-    if n >= range.0 && n <= range.1 {
-        return true;
-    }
-    false
-}
-
 fn check_ranges_overlap(ranges: &mut [(i64, i64)]) {
     ranges.sort_by_key(|start| start.0);
 
     for r in 0..(ranges.len() - 1) {
         for v in (r + 1)..ranges.len() {
-            if ranges[v] != (-1, -1) {
-                if is_between(ranges[r].0, ranges[v]) && is_between(ranges[r].1, ranges[v]) {
-                    ranges[r] = ranges[v];
-                    ranges[v] = (-1, -1)
-                } else if is_between(ranges[r].0, ranges[v]) {
-                    ranges[r].0 = ranges[v].0;
-                    ranges[v] = (-1, -1)
-                } else if is_between(ranges[r].1, ranges[v]) {
+            if ranges[r].1 >= ranges[v].0 {
+                if ranges[r].1 < ranges[v].1 {
                     ranges[r].1 = ranges[v].1;
-                    ranges[v] = (-1, -1)
                 }
+                ranges[v] = (-1, -1);
             }
         }
     }
 }
 
 pub fn ex2() {
-    let full_fich =
-        fs::read_to_string("src/day5-example.txt").expect("Could not open the file to read");
+    let full_fich = fs::read_to_string("src/day5.txt").expect("Could not open the file to read");
     let (ranges_fich, _) = full_fich
         .split_once("\n\n")
         .expect("Couldnt split full fich onto ranges and ids");
