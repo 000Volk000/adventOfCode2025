@@ -1,0 +1,9 @@
+/vendor/
+/.bundle/
+
+/.ruby-lsp/
+/coverage/
+
+.DS_Store
+*.swp
+*.log
