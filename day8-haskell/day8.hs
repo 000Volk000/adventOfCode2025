@@ -13,11 +13,13 @@ main = do
   let distance_matrix = makeDistanceMatrix list
 
   let distance_list = take n_connections $ sortList (nubBy (\(x,_,_) (y,_,_) -> x == y) (makeList distance_matrix))
-  print distance_list
 
   let connected_points = getConnectedPoints distance_list
-  print "---------------------------------------"
-  print connected_points
+ 
+  let len_matrix = lenMatrix connected_points
+  let result = multiplyList len_matrix
+
+  print result
 
   hClose fich
 
@@ -92,3 +94,12 @@ mergeGroups groups (x, y) =
     let (exists, rest) = partition (\group -> x `elem` group || y `elem` group) groups
         newGroup = nub $ concat exists ++ [x, y]
     in newGroup : rest
+
+lenList :: [Int] -> Int
+lenList = foldl (\x _ -> x + 1) 0
+
+lenMatrix :: [[Int]] -> [Int]
+lenMatrix = map lenList
+
+multiplyList :: [Int] -> Int
+multiplyList (x1:x2:x3:_) = x1 * x2 * x3
