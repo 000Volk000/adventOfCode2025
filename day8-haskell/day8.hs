@@ -4,15 +4,15 @@ import Data.List.Split
 import Data.List (sortBy, nubBy, partition, nub)
 
 main = do
-  let n_connections = 10
-  fich <- openFile "day8-example.txt" ReadMode
+  let n_connections = 2*1000
+  fich <- openFile "day8.txt" ReadMode
   full_fich <- hGetContents fich
   let list_string = words full_fich
   let list = divide list_string
 
   let distance_matrix = makeDistanceMatrix list
 
-  let distance_list = take n_connections $ sortList (nubBy (\(x,_,_) (y,_,_) -> x == y) (makeList distance_matrix))
+  let distance_list = take n_connections $ sortList (makeList distance_matrix)
 
   let connected_points = getConnectedPoints distance_list
  
