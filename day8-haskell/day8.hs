@@ -1,7 +1,7 @@
 import System.IO
 import Control.Monad
 import Data.List.Split
-import Data.List (sortBy, nubBy)
+import Data.List (sortBy, nubBy, partition, nub)
 
 main = do
   let n_connections = 10
@@ -12,8 +12,12 @@ main = do
 
   let distance_matrix = makeDistanceMatrix list
 
-  let distance_list = nubBy (\(x,_,_) (y,_,_) -> x == y) (makeList distance_matrix)
-  print (take n_connections $ sortList distance_list)
+  let distance_list = take n_connections $ sortList (nubBy (\(x,_,_) (y,_,_) -> x == y) (makeList distance_matrix))
+  print distance_list
+
+  let connected_points = getConnectedPoints distance_list
+  print "---------------------------------------"
+  print connected_points
 
   hClose fich
 
@@ -77,3 +81,14 @@ minCompList (a,_,_) (b,_,_)
 
 makeList :: [[(Double,Int,Int)]] -> [(Double,Int,Int)]
 makeList = concat
+
+getConnectedPoints :: [(Double, Int, Int)] -> [[Int]]
+getConnectedPoints list = foldl mergeGroups [] pairs
+  where
+    pairs = [(x, y) | (_, x, y) <- list]
+
+mergeGroups :: [[Int]] -> (Int, Int) -> [[Int]]
+mergeGroups groups (x, y) =
+    let (exists, rest) = partition (\group -> x `elem` group || y `elem` group) groups
+        newGroup = nub $ concat exists ++ [x, y]
+    in newGroup : rest
