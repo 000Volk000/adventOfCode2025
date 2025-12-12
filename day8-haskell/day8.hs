@@ -10,9 +10,7 @@ main = do
   let list = divide list_string
 
   let distance_matrix = makeDistanceMatrix list
-
-  let minimum_distances = minDistances distance_matrix
-  print minimum_distances
+  print distance_matrix
 
   hClose fich
 
@@ -46,6 +44,18 @@ minComp tA@(a,_,_) tB@(b,_,_)
     | a < b  = tA
     | a == b = tA
 
+findMinimumConnexions :: Int -> [(Double,Int,Int)] -> [(Double,Int,Int)]
+findMinimumConnexions 0 _ = []
+findMinimumConnexions n v = minDistance v : findMinimumConnexions (n-1) (updateList v (minDistance v))
+
+updateList :: [(Double,Int,Int)] -> (Double,Int,Int) -> [(Double,Int,Int)]
+updateList list touple =
+  let pos = findPos list touple
+      (start,_:end) = splitAt pos list
+  in start ++ (9999999999999,-1,-1) : end
 
 findPointPos :: [[Double]] -> [Double] -> Int
 findPointPos list elt = head [index | (index, e) <- zip [0..] list, e == elt]
+
+findPos :: [(Double,Int,Int)] -> (Double,Int,Int) -> Int
+findPos list elt = head [index | (index, e) <- zip [0..] list, e == elt]
