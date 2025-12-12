@@ -12,18 +12,11 @@ main = do
   let list = divide list_string
 
   let distance_matrix = makeDistanceMatrix list
-
   let distance_list = sortList (makeList distance_matrix)
 
-  let connected_points = sort (head (getConnectedPoints distance_list))
+  let last_touple = getConnectedPoints distance_list
 
-  let missing = if head connected_points > 0
-                then 0
-                else getMissing connected_points
-
-  let touple = findTouple distance_list 189
-
-  let result = multiplyX touple list
+  let result = multiplyX last_touple list
   print result
 
   hClose fich
@@ -89,15 +82,15 @@ minCompList (a,_,_) (b,_,_)
 makeList :: [[(Double,Int,Int)]] -> [(Double,Int,Int)]
 makeList = concat
 
-getConnectedPoints :: [(Double, Int, Int)] -> [[Int]]
-getConnectedPoints list = connect [] pairs
-  where pairs = [(x, y) | (_, x, y) <- list]
-        connect :: [[Int]] -> [(Int, Int)] -> [[Int]]
-        connect groups (p:ps) =
-          let newGroups = mergeGroups groups p
-          in if any (\g -> length g >= 997) newGroups
-            then newGroups
-            else connect newGroups ps
+getConnectedPoints :: [(Double, Int, Int)] -> (Double, Int, Int)
+getConnectedPoints = connect []
+  where
+        connect :: [[Int]] -> [(Double, Int, Int)] -> (Double, Int, Int)
+        connect groups (t@(_, x, y):ts) =
+          let newGroups = mergeGroups groups (x, y)
+          in if length newGroups == 1 && length (head newGroups) == 1000
+            then t
+            else connect newGroups ts
 
 mergeGroups :: [[Int]] -> (Int, Int) -> [[Int]]
 mergeGroups groups (x, y) =
@@ -113,21 +106,6 @@ lenMatrix = map lenList
 
 multiplyList :: [Int] -> Int
 multiplyList (x1:x2:x3:_) = x1 * x2 * x3
-
-getMissing :: [Int] -> Int
-getMissing [] = -1
-getMissing [x] = x+1
-getMissing (x:y:rest) =
-    if y /= x + 1
-    then x + 1
-    else getMissing (y:rest)
-
-findTouple :: [(Double, Int, Int)] -> Int -> (Double, Int, Int)
-findTouple [] _ = (-1,-1,-1)
-findTouple (t1@(_,x,y):rest) n =
-  if x /= n && y /= n
-  then findTouple rest n
-  else t1
 
 multiplyX :: (Double,Int,Int) -> [[Double]] -> Int
 multiplyX (_,p1,p2) list = round (head (list !! p1) * head (list !! p2))
