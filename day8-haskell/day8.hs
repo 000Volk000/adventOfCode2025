@@ -2,6 +2,7 @@ import System.IO
 import Control.Monad
 import Data.List.Split
 import Data.List (sortBy, nubBy, partition, nub)
+import Data.Ord (comparing, Down(..))
 
 main = do
   let n_connections = 2*1000
@@ -17,7 +18,7 @@ main = do
   let connected_points = getConnectedPoints distance_list
  
   let len_matrix = lenMatrix connected_points
-  let result = multiplyList len_matrix
+  let result = multiplyList (sortBy (comparing Down) len_matrix)
 
   print result
 
