@@ -1,7 +1,7 @@
 import System.IO
 import Control.Monad
 import Data.List.Split
-import Data.List (sortBy)
+import Data.List (sortBy, nubBy)
 
 main = do
   let n_connections = 10
@@ -12,8 +12,8 @@ main = do
 
   let distance_matrix = makeDistanceMatrix list
 
-  let distance_list = makeList distance_matrix
-  print (sortList distance_list)
+  let distance_list = nubBy (\(x,_,_) (y,_,_) -> x == y) (makeList distance_matrix)
+  print (take n_connections $ sortList distance_list)
 
   hClose fich
 
