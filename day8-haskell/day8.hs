@@ -14,7 +14,6 @@ main = do
   let minimum_distances = minDistances distance_matrix
   print minimum_distances
 
-  print (findMinimumConnexions n_connections minimum_distances)
   hClose fich
 
 divide :: [String] -> [[Double]]
@@ -26,32 +25,27 @@ divide = map divideList
 toDouble :: String -> Double
 toDouble = read
 
-makeDistanceMatrix :: [[Double]] -> [[Double]]
-makeDistanceMatrix points = [ [ distance p1 p2 | p2 <- points ] | p1 <- points ]
+makeDistanceMatrix :: [[Double]] -> [[(Double, Int, Int)]]
+makeDistanceMatrix points = [ [(distance p1 p2, findPointPos points p1, findPointPos points p2)| p2 <- points ] | p1 <- points ]
 
 distance :: [Double] -> [Double] -> Double
 distance [x1,y1,z1] [x2,y2,z2] = sqrt ((x1-x2)^2+(y1-y2)^2+(z1-z2)^2)
 
-minDistances :: [[Double]] -> [Double]
+minDistances :: [[(Double, Int, Int)]] -> [(Double, Int, Int)]
 minDistances = map minDistance
 
-minDistance :: [Double] -> Double
+minDistance :: [(Double, Int, Int)] -> (Double, Int, Int)
 minDistance [x] = x
 minDistance (x:xs) = minComp x (minDistance xs)
 
-minComp :: Double -> Double -> Double
-minComp a b
-    | a == 0.0 = b
-    | b == 0.0 = a
-    | a > b  = b
-    | a < b  = a
-    | a == b = a
+minComp :: (Double,Int,Int) -> (Double,Int,Int) -> (Double,Int,Int)
+minComp tA@(a,_,_) tB@(b,_,_)
+    | a == 0.0 = tB
+    | b == 0.0 = tA
+    | a > b  = tB
+    | a < b  = tA
+    | a == b = tA
 
-findMinimumConnexions :: Int -> [Double] -> [[Int]]
-findMinimumConnexions 0 _ = []
-findMinimumConnexions n v =
-  let pos = findPos v (minDistance v)
-  in pos : findMinimumConnexions (n-1) v
 
-findPos :: [Double] -> Double -> [Int]
-findPos list elt = [index | (index, e) <- zip [0..] list, e == elt]
+findPointPos :: [[Double]] -> [Double] -> Int
+findPointPos list elt = head [index | (index, e) <- zip [0..] list, e == elt]
