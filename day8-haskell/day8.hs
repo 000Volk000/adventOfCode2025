@@ -1,6 +1,7 @@
 import System.IO
 import Control.Monad
 import Data.List.Split
+import Data.List (sortBy)
 
 main = do
   let n_connections = 10
@@ -10,7 +11,9 @@ main = do
   let list = divide list_string
 
   let distance_matrix = makeDistanceMatrix list
-  print distance_matrix
+
+  let distance_list = makeList distance_matrix
+  print (sortList distance_list)
 
   hClose fich
 
@@ -59,3 +62,18 @@ findPointPos list elt = head [index | (index, e) <- zip [0..] list, e == elt]
 
 findPos :: [(Double,Int,Int)] -> (Double,Int,Int) -> Int
 findPos list elt = head [index | (index, e) <- zip [0..] list, e == elt]
+
+sortList :: [(Double,Int,Int)] -> [(Double,Int,Int)]
+sortList = sortBy minCompList
+
+minCompList :: (Double,Int,Int) -> (Double,Int,Int) -> Ordering
+minCompList (a,_,_) (b,_,_)
+    | a == 0.0 && b == 0.0 = EQ
+    | a == 0.0 = GT
+    | b == 0.0 = LT
+    | a < b = LT
+    | a > b = GT
+    | a == b = LT
+
+makeList :: [[(Double,Int,Int)]] -> [(Double,Int,Int)]
+makeList = concat
