@@ -14,7 +14,7 @@ main = do
   let minimum_distances = minDistances distance_matrix
   print minimum_distances
 
-  print (minDistance minimum_distances)
+  print (findMinimumConnexions n_connections minimum_distances)
   hClose fich
 
 divide :: [String] -> [[Double]]
@@ -46,3 +46,12 @@ minComp a b
     | a > b  = b
     | a < b  = a
     | a == b = a
+
+findMinimumConnexions :: Int -> [Double] -> [[Int]]
+findMinimumConnexions 0 _ = []
+findMinimumConnexions n v =
+  let pos = findPos v (minDistance v)
+  in pos : findMinimumConnexions (n-1) v
+
+findPos :: [Double] -> Double -> [Int]
+findPos list elt = [index | (index, e) <- zip [0..] list, e == elt]
